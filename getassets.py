@@ -7,6 +7,7 @@ pokeurl = "https://pokeapi.co/api/v2/"
 
 ids = [i for i in range(1, 1011)]
 extraids = []
+fails = 0
 
 def getmon(id):
     pokemon = requests.get(pokeurl + f'pokemon/{id}').json()
@@ -28,17 +29,19 @@ def getmon(id):
         print(f"\t SPRITE LOADED:{id: 5.0f} || {pokemon.get('name'):^27} ||")
     except:
         print(f"\t\tFailed to get {pokemon.get('name')}")
+        fails+=0
 
 
 start = time.perf_counter()
 print("Downloading Pokemon Sprites!!!")
 with ThreadPool() as pool:
     pool.map(getmon, ids)
-print(f"Pokemon Sprites Loaded In{time.perf_counter() - start: .3f}s !!!")
+print(f"Pokemon Sprites Loaded In{time.perf_counter() - start: .3f}s || {fails} Failures !!!")
 time.sleep(.4)
 
+fails = 0
 start = time.perf_counter()
 print("Downloading Regional Form Sprites !!!")
 with ThreadPool() as rpool:
     rpool.map(getmon, extraids)
-print(f"Regional Form Sprites Loaded In{time.perf_counter() - start: .3f}s !!!")
+print(f"Regional Form Sprites Loaded In{time.perf_counter() - start: .3f}s || {fails} Failures !!!")
