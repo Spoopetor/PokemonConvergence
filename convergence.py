@@ -28,7 +28,7 @@ types = [
     'fairy'
     ]
 
-nonos = ['gmax', 'etnernamax', 'mega', 'build', 'mode', 'noice']
+nonos = ['gmax', 'eternamax', 'mega', 'build', 'mode', 'noice']
 
 typecombos = []
 typeabilities = {}
