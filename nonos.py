@@ -1,1 +1,1 @@
-nonos = ['gmax', 'eternamax', 'mega', 'build', 'mode', 'noice', 'gulping']
+nonos = ['gmax', 'eternamax', 'mega', 'build', 'mode', 'noice', 'gulping', 'hangry', 'gorging', 'dada', 'totem', 'world', 'starter', 'zygarde-10']
