@@ -4,6 +4,7 @@ import time
 from itertools import permutations
 from tqdm import tqdm
 from multiprocessing.pool import ThreadPool
+from nonos import nonos
 
 pokeurl = "https://pokeapi.co/api/v2/"
 
@@ -27,8 +28,6 @@ types = [
     'steel',
     'fairy'
     ]
-
-nonos = ['gmax', 'eternamax', 'mega', 'build', 'mode', 'noice', 'gulping']
 
 typecombos = []
 typeabilities = {}

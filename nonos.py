@@ -1,0 +1,1 @@
+nonos = ['gmax', 'eternamax', 'mega', 'build', 'mode', 'noice', 'gulping']

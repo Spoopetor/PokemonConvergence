@@ -1,7 +1,7 @@
 import requests
 import time
 from multiprocessing.pool import ThreadPool
-from convergence import nonos
+from nonos import nonos
 
 pokeurl = "https://pokeapi.co/api/v2/"
 
@@ -41,4 +41,4 @@ start = time.perf_counter()
 print("Downloading Regional Form Sprites !!!")
 with ThreadPool() as rpool:
     rpool.map(getmon, extraids)
-print(f"Regional Form Sprites Loaded in{time.perf_counter() - start: .3f}s !!!")
+print(f"Regional Form Sprites Loaded In{time.perf_counter() - start: .3f}s !!!")
