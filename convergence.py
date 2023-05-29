@@ -37,16 +37,19 @@ typemons = {}
 idmons = {}
 idtype = {}
 movemons = {}
+abmons = {}
 
 for t1 in types:
     typecombos.append((t1))
     typemons[(t1)] = []
     typemoves[(t1)] = []
+    typeabilities[(t1)] = []
     for t2 in types:
         if t1 != t2 and (t2, t1) not in typecombos:
             typecombos.append((t1, t2))
             typemons[(t1, t2)] = []
             typemoves[(t1, t2)] = []
+            typeabilities[(t1, t2)] = []
 
 
 ids = [i for i in range(1, 1011)]
@@ -69,7 +72,8 @@ def getmon(id):
         types = (types)
     idtype[id] = types
     moves = loadmoves(pokemon, types)
-    print(f"\t LOADED: {id: 4.0f} - {pokemon.get('name')} == {types} == {len(moves)} moves")
+    abilities = loadabilities(pokemon, types)
+    print(f"\t LOADED:{id: 5.0f} || {pokemon.get('name'):^27} || {len(moves):>3} moves || {len(abilities):>2} abilities || {types}")
 
 def montype(pokemon):
     types = tuple([i.get('type').get('name') for i in pokemon.get('types')])
@@ -92,6 +96,16 @@ def loadmoves(pokemon, types):
         if m not in typemoves.get(types):
             typemoves[types].append(m)
     return moves
+
+def loadabilities(pokemon, types):
+    abilities = ([i.get('ability').get('name') for i in pokemon.get('abilities')])
+    for a in abilities:
+        if a not in abmons.keys():
+            abmons[a] = []
+        abmons[a].append(pokemon.get('name'))
+        if a not in typeabilities.get(types):
+            typeabilities[types].append(a)
+    return abilities
     
 start = time.perf_counter()
 print("Loading Pokemon !!!")
