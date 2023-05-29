@@ -5,6 +5,8 @@ from itertools import permutations
 from tqdm import tqdm
 from multiprocessing.pool import ThreadPool
 from nonos import nonos
+import pandas as pd
+import openpyxl
 
 pokeurl = "https://pokeapi.co/api/v2/"
 
@@ -33,6 +35,7 @@ typecombos = []
 typeabilities = {}
 typemoves = {}
 typemons = {}
+typemonnames = {}
 idmons = {}
 idtype = {}
 movemons = {}
@@ -41,12 +44,14 @@ abmons = {}
 for t1 in types:
     typecombos.append((t1))
     typemons[(t1)] = []
+    typemonnames[(t1)] = []
     typemoves[(t1)] = []
     typeabilities[(t1)] = []
     for t2 in types:
         if t1 != t2 and (t2, t1) not in typecombos:
             typecombos.append((t1, t2))
             typemons[(t1, t2)] = []
+            typemonnames[(t1, t2)] = []
             typemoves[(t1, t2)] = []
             typeabilities[(t1, t2)] = []
 
@@ -78,12 +83,15 @@ def montype(pokemon):
     types = tuple([i.get('type').get('name') for i in pokemon.get('types')])
     if types in typecombos:
         typemons[types].append(pokemon)
+        typemonnames[types].append(pokemon.get('name'))
         return(types)
     elif tuple(reversed(types)) in typecombos:
         typemons[tuple(reversed(types))].append(pokemon)
+        typemonnames[tuple(reversed(types))].append(pokemon.get('name'))
         return(tuple(reversed(types)))
     elif types[0] in typecombos:
         typemons[types[0]].append(pokemon)
+        typemonnames[types[0]].append(pokemon.get('name'))
         return (types[0])
     
 def loadmoves(pokemon, types):
@@ -118,3 +126,21 @@ print("Loading Regional Forms !!!")
 with ThreadPool() as rpool:
     rpool.map(getmon, extraids)
 print(f"Regional Forms Loaded In{time.perf_counter() - start: .3f}s !!!")
+
+for v in typemoves.values():
+    v.sort()
+for v in typeabilities.values():
+    v.sort()
+for v in typemonnames.values():
+    v.sort()
+
+start = time.perf_counter()
+print("Creating Datasheets !!!")
+movedf = pd.DataFrame.from_dict(typemoves, orient='index')
+movedf.transpose().to_excel('TypeMoves.xlsx', sheet_name='Type Moves')
+abildf = pd.DataFrame.from_dict(typeabilities, orient='index')
+abildf.transpose().to_excel('TypeAbilities.xlsx', sheet_name='Type Abilities')
+pokedf = pd.DataFrame.from_dict(typemonnames, orient='index')
+pokedf.transpose().to_excel('TypePokemon.xlsx', sheet_name='Type Pokemon')
+print(f"Datasheets Created In{time.perf_counter() - start: .3f}s !!!")
+
