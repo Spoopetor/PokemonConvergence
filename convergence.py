@@ -111,11 +111,11 @@ start = time.perf_counter()
 print("Loading Pokemon !!!")
 with ThreadPool() as pool:
     pool.map(getmon, ids)
-print(f"Pokemon Loaded in{time.perf_counter() - start: .3f}s !!!")
+print(f"Pokemon Loaded In{time.perf_counter() - start: .3f}s !!!")
 time.sleep(.4)
 
 start = time.perf_counter()
 print("Loading Regional Forms !!!")
 with ThreadPool() as rpool:
     rpool.map(getmon, extraids)
-print(f"Regional Forms Loaded in{time.perf_counter() - start: .3f}s !!!")
+print(f"Regional Forms Loaded In{time.perf_counter() - start: .3f}s !!!")
