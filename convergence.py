@@ -36,14 +36,17 @@ typemoves = {}
 typemons = {}
 idmons = {}
 idtype = {}
+movemons = {}
 
 for t1 in types:
     typecombos.append((t1))
     typemons[(t1)] = []
+    typemoves[(t1)] = []
     for t2 in types:
         if t1 != t2 and (t2, t1) not in typecombos:
             typecombos.append((t1, t2))
             typemons[(t1, t2)] = []
+            typemoves[(t1, t2)] = []
 
 
 ids = [i for i in range(1, 1011)]
@@ -62,7 +65,11 @@ def getmon(id):
 
     idmons[id] = pokemon
     types = montype(pokemon)
-    print(f"\t LOADED: {id: 4.0f} - {pokemon.get('name')} == {types}")
+    if type(types) is not tuple:
+        types = (types)
+    idtype[id] = types
+    moves = loadmoves(pokemon, types)
+    print(f"\t LOADED: {id: 4.0f} - {pokemon.get('name')} == {types} == {len(moves)} moves")
 
 def montype(pokemon):
     types = tuple([i.get('type').get('name') for i in pokemon.get('types')])
@@ -76,17 +83,25 @@ def montype(pokemon):
         typemons[types[0]].append(pokemon)
         return (types[0])
     
-def getmoves(pokemon):
-    pass
-
-print("Loading Pokemon!!!")
+def loadmoves(pokemon, types):
+    moves = ([i.get('move').get('name') for i in pokemon.get('moves')])
+    for m in moves:
+        if m not in movemons.keys():
+            movemons[m] = []
+        movemons[m].append(pokemon.get('name'))
+        if m not in typemoves.get(types):
+            typemoves[types].append(m)
+    return moves
+    
+start = time.perf_counter()
+print("Loading Pokemon !!!")
 with ThreadPool() as pool:
     pool.map(getmon, ids)
-print("Pokemon Loaded!!!")
+print(f"Pokemon Loaded in{time.perf_counter() - start: .3f}s !!!")
 time.sleep(.4)
 
-print("Loading Regional Forms!!!")
+start = time.perf_counter()
+print("Loading Regional Forms !!!")
 with ThreadPool() as rpool:
     rpool.map(getmon, extraids)
-print("Regional Forms Loaded!!!")
-
+print(f"Regional Forms Loaded in{time.perf_counter() - start: .3f}s !!!")
